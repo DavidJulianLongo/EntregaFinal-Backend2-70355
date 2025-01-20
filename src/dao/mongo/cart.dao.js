@@ -9,11 +9,7 @@ class CartDao extends BaseDao {
     }
 
     async getByIdPop(cartId) {
-        try {
-            return await cartModel.findById(cartId).populate('products.product');
-        } catch (error) {
-            throw error
-        }
+        return await cartModel.findById(cartId).populate('products.product');
     }
 
     async findOneAndUpdate(cartId, prodId, quantity) {

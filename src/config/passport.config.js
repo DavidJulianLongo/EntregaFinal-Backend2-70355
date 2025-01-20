@@ -4,10 +4,14 @@ import google from "passport-google-oauth20";
 import { userDao } from "../dao/mongo/user.dao.js";
 import { cartDao } from "../dao/mongo/cart.dao.js";
 import { createHash, isValidPassword } from "../utils/hashPassword.js";
+import jwt from "passport-jwt";
+import { cookieExtractor } from "../utils/cookieExtractor.js";
 
 
 const LocalStrategy = local.Strategy;
 const GoogleStrategy = google.Strategy;
+const JwtStrategy = jwt.Strategy;
+const ExtractJwt = jwt.ExtractJwt;
 
 //funcion para inicializar passport
 export const initializePassport = () => {
@@ -52,7 +56,7 @@ export const initializePassport = () => {
         } catch (error) {
             done(error)
         }
-    }))
+    }));
 
 
     //estrategia con google
@@ -74,6 +78,7 @@ export const initializePassport = () => {
                     first_name: name.givenName,
                     last_name: name.familyName,
                     email: emails[0].value,
+                    role,
                     cart: newCart._id
                 };
 
@@ -83,7 +88,24 @@ export const initializePassport = () => {
                 cb(error)
             }
         }
-    ))
+    ));
+
+
+    //estrategia con jwt
+    passport.use("current", new JwtStrategy({ jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]), secretOrKey: process.env.JWT_SECRET },
+        async (jwt_payload, done) => {
+            try {
+                const { email } = jwt_payload;
+                const user = await userDao.getByEmail(email);
+                // excluye la pass del usuario en la respuesta
+                if (user) user.password = undefined;
+                done(null, user);
+            } catch (error) {
+                done(error)
+            }
+        }
+    ));
+
 
     passport.serializeUser((user, done) => {
         done(null, user._id);
