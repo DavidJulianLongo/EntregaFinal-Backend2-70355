@@ -2,7 +2,7 @@ import express from 'express';
 import routes from "./routes/index.js";
 import { conectMongoDB } from './config/mongoDB.config.js';
 import session from 'express-session';
-import { initializePassport } from './config/passport.config.js';
+import { initializePassport } from './config/passport/passport.config.js';
 import cookieParser from 'cookie-parser';
 
 
