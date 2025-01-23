@@ -5,7 +5,6 @@ import { isValidPassword } from "../../../utils/hashPassword.js";
 export const localLogin = new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
     try {
         const user = await userDao.getByEmail(username);
-        if (!user) return done(null, false, { message: "Incorrect username or password" });
         const validPass = isValidPassword(password, user);
         if (!user || !validPass) return done(null, false, { message: "Incorrect username or password" });
 
