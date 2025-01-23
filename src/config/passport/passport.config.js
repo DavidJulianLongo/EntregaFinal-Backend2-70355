@@ -8,8 +8,8 @@ import { jwt } from "./strategies/jwt.js";
 // Función para inicializar Passport
 export const initializePassport = () => {
 
-    passport.use("login", localLogin);
     passport.use("register", localRegister);
+    passport.use("login", localLogin);
     passport.use(google);
     passport.use("current", jwt);
 

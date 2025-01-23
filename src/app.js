@@ -21,8 +21,9 @@ app.use(
 
 // Inicializar passport
 initializePassport();
-// Inicializar cookie-parser
-app.use(cookieParser());
+
+// Inicializar cookie-parser con la palabra secreta
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Rutas de la api
 app.use("/api", routes);

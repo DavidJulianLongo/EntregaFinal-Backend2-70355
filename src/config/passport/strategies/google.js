@@ -11,7 +11,7 @@ export const google = new GoogleStrategy(
     },
     async (accessToken, refreshToken, profile, cb) => {
         try {
-            const {name, emails} = profile;
+            const { name, emails } = profile;
             const user = await userDao.getByEmail(emails[0].value);
             if (user) return cb(null, user);
 

@@ -20,8 +20,12 @@ export const localRegister = new LocalStrategy({ passReqToCallback: true, userna
             password: createHash(password),
             role,
             cart: newCart._id
+        
         }
+
+        if (newUser.role === "admin") newUser.cart = undefined;
         const createUser = await userDao.create(newUser);
+
         return done(null, createUser);
     } catch (error) {
         done(error);
