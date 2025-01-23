@@ -91,8 +91,7 @@ router.delete("/current/delete", passportCall("current"), async (req, res) => {
     try {
         // Verificar si el usuario existe antes de intentar eliminarlo
         const user = await userDao.getById(req.user._id);
-        console.log(user.cart)
-
+        if (!user) return res.status(404).json({ status: "Error", message: "User not found" });
         // Elimina el carrito del usuario
         if (user.cart) await cartDao.deleteOne(user.cart);
 
@@ -101,7 +100,6 @@ router.delete("/current/delete", passportCall("current"), async (req, res) => {
         res.status(200).json({ status: "Success", message: "User account deleted successfully", paylod: { userId: user._id, userEmail: user.email } });
 
     } catch (error) {
-        console.error("Error during account deletion:", error);
         res.status(500).json({ status: "Error", msg: "Internal server error" });
     }
 });
