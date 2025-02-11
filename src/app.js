@@ -1,23 +1,15 @@
 import express from 'express';
 import routes from "./routes/index.js";
 import { conectMongoDB } from './config/mongoDB.config.js';
-import session from 'express-session';
 import { initializePassport } from './config/passport/passport.config.js';
 import cookieParser from 'cookie-parser';
+import { errorHandler } from './middlewares/errorHandler.js'; 
 
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use(
-    session({
-      secret: process.env.SESSION_SECRET, // palabra secreta
-      resave: true, // Mantiene la session activa, si esta en false la session se cierra
-      saveUninitialized: true  // Guarda la session
-    })
-);
 
 // Inicializar passport
 initializePassport();
@@ -27,6 +19,9 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Rutas de la api
 app.use("/api", routes);
+
+// Middleware de manejo de errores 
+app.use(errorHandler);
 
 // Conexión a MongoDB y arranque del servidor
 conectMongoDB()

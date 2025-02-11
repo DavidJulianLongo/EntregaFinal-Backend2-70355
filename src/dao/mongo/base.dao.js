@@ -4,7 +4,7 @@ class BaseDao {
     }
 
     async getAll() {
-        return await this.model.find();
+        return await this.model.find({});
     }
 
     async getById(id) {

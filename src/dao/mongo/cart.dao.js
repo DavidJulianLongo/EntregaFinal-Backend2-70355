@@ -8,7 +8,7 @@ class CartDao extends BaseDao {
         super(cartModel);
     }
 
-    async getByIdPop(cartId) {
+    async getCartById(cartId) {
         return await cartModel.findById(cartId).populate('products.product');
     }
 

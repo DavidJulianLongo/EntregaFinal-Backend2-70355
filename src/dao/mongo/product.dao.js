@@ -6,6 +6,15 @@ class ProductDao extends BaseDao {
         super(prodModel);
     }
 
+    async getAll(filter, options) {
+        try {
+            const response = await prodModel.paginate(filter, options);
+            return response;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
 };
 
 export const productDao = new ProductDao();

@@ -7,8 +7,6 @@ export const jwt = new JwtStrategy({ jwtFromRequest: ExtractJwt.fromExtractors([
     try {
         const { email } = jwt_paylod;
         const user = await userDao.getByEmail(email);
-        // excluye la contraseña del usuario en la respuesta
-        if (user) user.password = undefined
         done(null, user);
     } catch (error) {
         done(error);

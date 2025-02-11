@@ -1,40 +1,21 @@
 import { Router } from "express";
 import passport from "passport";
-import { generateToken } from "../utils/jwt.js";
 import { passportCall } from "../middlewares/passportCall.middleware.js";
 import { authorization } from "../middlewares/authorization.middleware.js";
 import { userDao } from "../dao/mongo/user.dao.js";
 import { cartDao } from "../dao/mongo/cart.dao.js";
+import { UserDTO } from "../dto/user.dto.js";
+import { sessionController } from "../controllers/sessions.controller.js";
 
 
 const router = Router();
 
-// Registro de usuario 
-router.post("/register", passportCall("register"), async (req, res) => {
-    try {
-       res.status(200).json({ status: "Success", message: "User registered successfully" });
-    } catch (error) {
-        res.status(500).json({ status: "Error", msg: "Internal server error" })
-    }
-});
+//Registro de usuario 
+router.post("/register", passportCall("register"), sessionController.register);
 
 
 // Login de usuario 
-router.post("/login", passportCall("login"), async (req, res) => {
-    try {
-
-        // Elimina la contraseña del objeto de usuario antes de enviarlo en la respuesta y _doc trae los datos del usuario y no el objeto completo 
-        const { password, ...userWithoutPassword } = req.user._doc;
-
-        //genera el token y lo almacena en una cookie por 24 horas
-        const token = generateToken(req.user);
-        res.cookie("token", token, { httpOnly: true, signed: true, maxAge: 1000 * 60 * 60 * 24 * 1 }); // 1 día
-
-        res.status(200).json({ status: "Success", message: "successful login", payload: userWithoutPassword, token });
-    } catch (error) {
-        res.status(500).json({ status: "Error", msg: "Internal server error" })
-    }
-});
+router.post("/login", passportCall("login"), sessionController.login);
 
 
 // google auth
@@ -44,19 +25,13 @@ router.get("/google", passport.authenticate("google", {
         "https://www.googleapis.com/auth/userinfo.email"
     ],
     session: false
-}), async (req, res) => {
-    try {
-        const token = generateToken(req.user);
-        res.status(200).json({ status: "Success", session: req.user, token });
-    } catch (error) {
-        res.status(500).json({ status: "Error", msg: "Internal server error" });
-    }
-});
+}), sessionController.google);
 
 
 // Obtener usuario actual
 router.get("/current", passportCall("current"), authorization("user"), async (req, res) => {
-    res.status(200).json({ status: "Success", user: req.user });
+    const user = new UserDTO(req.user);
+    res.status(200).json({ status: "Success", user: user});
 });
 
 
@@ -65,7 +40,7 @@ router.put("/current/update", passportCall("current"), async (req, res) => {
     try {
         const { first_name, last_name, email } = req.body;
 
-        const user = await userDao.getByEmail(req.user.email);
+        const user = await userDao.getById(req.user._id);
 
         // crea un objeto con los campos actualizados
         const updatedFields = {};
@@ -102,6 +77,9 @@ router.delete("/current/delete", passportCall("current"), async (req, res) => {
     } catch (error) {
         res.status(500).json({ status: "Error", msg: "Internal server error" });
     }
+
+
+
 });
 
 

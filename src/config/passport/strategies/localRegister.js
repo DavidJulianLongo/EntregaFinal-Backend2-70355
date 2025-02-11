@@ -1,14 +1,13 @@
 import { Strategy as LocalStrategy } from "passport-local";
 import { userDao } from "../../../dao/mongo/user.dao.js";
-import { createHash } from "../../../utils/hashPassword.js";
 import { cartDao } from "../../../dao/mongo/cart.dao.js";
+import { createHash } from "../../../utils/hashPassword.js";
 
 
 export const localRegister = new LocalStrategy({ passReqToCallback: true, usernameField: "email" }, async (req, username, password, done) => {
+
     try {
-        const { first_name, last_name, age, role} = req.body;
-        const user = await userDao.getByEmail(username);
-        if (user) return done(null, false, { message: "User already exists" });
+        const { first_name, last_name, age, role } = req.body;
 
         // Valida que los campos no estén vacíos 
         if (
@@ -16,12 +15,14 @@ export const localRegister = new LocalStrategy({ passReqToCallback: true, userna
             !last_name?.trim() ||
             !age?.toString().trim() ||
             !username?.trim() ||
-            !password?.trim() 
-            
-        )  return done(null, false, { message: "All fields are required" });
-    
+            !password?.trim()
 
-        const newCart = await cartDao.create();
+        ) return done(null, false, { message: "All fields are required" });
+
+        const user = await userDao.getByEmail(username)
+        if (user) return done(null, false, { message: "User already exists" });
+
+        const newCart = role !== "admin" ? await cartDao.create() : null;
 
         const newUser = {
             first_name,
@@ -30,16 +31,12 @@ export const localRegister = new LocalStrategy({ passReqToCallback: true, userna
             age,
             password: createHash(password),
             role,
-            cart: newCart._id
-
+            cart: newCart?._id
         }
 
-        if (newUser.role === "admin") newUser.cart = undefined;
         const createUser = await userDao.create(newUser);
-
         return done(null, createUser);
     } catch (error) {
         done(error);
     }
-
-});
+}); 

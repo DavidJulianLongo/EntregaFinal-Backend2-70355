@@ -18,10 +18,9 @@ export const google = new GoogleStrategy(
             const newCart = await cartDao.create();
 
             const newUser = {
-                firts_name: name.givenName,
+                first_name : name.givenName,
                 last_name: name.familyName,
                 email: emails[0].value,
-                role,
                 cart: newCart._id
             }
 

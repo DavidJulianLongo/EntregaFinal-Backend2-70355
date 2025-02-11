@@ -3,6 +3,7 @@ import { localRegister } from "./strategies/localRegister.js";
 import { localLogin } from "./strategies/localLogin.js";
 import { google } from "./strategies/google.js";
 import { jwt } from "./strategies/jwt.js";
+import { userDao } from "../../dao/mongo/user.dao.js";
 
 
 // Función para inicializar Passport
