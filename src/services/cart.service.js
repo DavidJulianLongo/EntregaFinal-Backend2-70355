@@ -78,7 +78,7 @@ class CartService {
     }
 
     
-    async remove(cartId, productId) {
+    async removeProduct(cartId, productId) {
         try {
             const cart = await cartDao.getById(cartId);
             if (!cart) throw new CustomError(`Cart with ID: ${cartId} not found`, 404);
@@ -102,7 +102,7 @@ class CartService {
         }
     }
 
-    async removeAll(cartId) {
+    async removeAllProducts(cartId) {
         try {
             const cart = await cartDao.getById(cartId);
             if (!cart) throw new CustomError(`Cart with ID: ${cartId} not found`, 404);

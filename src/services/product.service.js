@@ -4,7 +4,7 @@ import { CustomError } from "../utils/customError.js";
 
 class ProductService{
 
-    async create(obj) {
+    async createProduct(obj) {
         try {
             const product = await productDao.create(obj);
             if (!product) throw new CustomError('Error creating item', 400);
@@ -28,7 +28,7 @@ class ProductService{
     }
 
 
-    async getById(id) {
+    async getProductById(id) {
         try {
             const product = await productDao.getById(id);
             if (!product) throw new CustomError(`Item with ID: ${id} not found`, 404);
@@ -38,7 +38,7 @@ class ProductService{
         }
     }
 
-    async update(id, data) {
+    async updateProduct(id, data) {
         try {
             const updatedProd = await productDao.update(id, data);
             if (!updatedProd) throw new CustomError(`Error updating item with ID: ${id}`, 400);
@@ -49,9 +49,9 @@ class ProductService{
     }
 
     
-    async remove(id) {
+    async removeProduct(id) {
         try {
-            const deletedProd = await productDao.deleteOne(id);
+            const deletedProd = await productDao.remove(id);
             if (!deletedProd) throw new CustomError(`Error deleting item with ID: ${id}`, 400);
             return deletedProd;
         } catch (error) {

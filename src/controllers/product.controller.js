@@ -2,9 +2,9 @@ import { prodService } from "../services/product.service.js";
 
 class ProductController {
 
-    async create(req, res, next) {
+    async createProduct(req, res, next) {
         try {
-            const product = await prodService.create(req.body);
+            const product = await prodService.createProduct(req.body);
             res.json({
                 status: "Succes",
                 payload: product
@@ -14,7 +14,7 @@ class ProductController {
         }
     }
 
-    async getAll(req, res, next) {
+    async getAllProducts(req, res, next) {
         try {
             const { page, limit, query, sort } = req.query;
             const response = await prodService.getAllProducts(page, limit, query, sort);
@@ -27,18 +27,18 @@ class ProductController {
                 page: response.page,
                 hasPrevPage: response.hasPrevPage,
                 hasNextPage: response.hasNextPage,
-                prevLink: response.hasPrevPage ? `http://localhost:8080/products?limit=${limit}&page=${response.prevPage}&sort=${sort}&query=${query}`: null, 
-                nextLink: response.hasNextPage ? `http://localhost:8080/products?limit=${limit}&page=${response.nextPage}&sort=${sort}&query=${query}` : null
+                prevLink: response.hasPrevPage ? `http://localhost:8080/api/products?limit=${limit}&page=${response.prevPage}&sort=${sort}&query=${query}`: null, 
+                nextLink: response.hasNextPage ? `http://localhost:8080/api/products?limit=${limit}&page=${response.nextPage}&sort=${sort}&query=${query}` : null
             });
         } catch (error) {
             next(error);
         }
     }
 
-    async getById(req, res, next) {
+    async getProductById(req, res, next) {
         try {
             const { id } = req.params;
-            const product = await prodService.getById(id);
+            const product = await prodService.getProductById(id);
             res.json({
                 status: "Succes",
                 payload: product
@@ -49,10 +49,10 @@ class ProductController {
     }
 
 
-    async update(req, res, next) {
+    async updateProduct(req, res, next) {
         try {
             const { id } = req.params;
-            const updatedProd = await prodService.update(id, req.body);
+            const updatedProd = await prodService.updateProduct(id, req.body);
             res.json({
                 status: "Succes",
                 payload: updatedProd
@@ -63,10 +63,10 @@ class ProductController {
     }
 
 
-    async remove(req, res, next) {
+    async removeProduct(req, res, next) {
         try {
             const { id } = req.params;
-            const deletedProd = await prodService.remove(id);
+            const deletedProd = await prodService.removeProduct(id);
             res.json({
                 status: "Succes",
                 message: "Removed product",

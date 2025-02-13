@@ -8,7 +8,7 @@ class CartController {
             const updatedCart = await cartService.addProdToCart(cid, pid);
             res.json({
                 status: "succes",
-                message: `Product with ID: ${pid} added to cart`,
+                message: "Product added to cart",
                 payload: { cart: updatedCart }
             });
         } catch (error) {
@@ -17,7 +17,7 @@ class CartController {
     }
 
 
-    async getAll(req, res, next) {
+    async getAllCarts(req, res, next) {
         try {
             const carts = await cartService.getAllCarts();
             res.json({
@@ -75,7 +75,7 @@ class CartController {
     async removeProd(req, res, next) {
         try {
             const { cid, pid } = req.params;
-            const deletedItem = await cartService.remove(cid, pid);
+            const deletedItem = await cartService.removeProduct(cid, pid);
             res.json({
                 status: "Succes",
                 message: `Product with ID: ${pid} successfully removed`,
@@ -89,7 +89,7 @@ class CartController {
     async removeAllProds(req, res, next) {
         try {
             const { cid } = req.params;
-            const updatedCart = await cartService.removeAll(cid);
+            const updatedCart = await cartService.removeAllProducts(cid);
             res.json({
                 status: "Succes",
                 message: "The cart was successfully emptied",
