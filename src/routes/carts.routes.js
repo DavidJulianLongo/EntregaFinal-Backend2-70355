@@ -17,7 +17,9 @@ router.put('/:cid/',passportCall("current"), authorization("user"), cartControll
 
 router.delete('/:cid/products/:pid',passportCall("current"), authorization("user"), cartController.removeProd);
 
-router.delete('/:cid',passportCall("current"), authorization("user"), cartController.removeAllProds);
+router.delete('/:cid', passportCall("current"), authorization("user"), cartController.removeAllProds);
+
+router.post('/:cid/purchase', passportCall("current"), authorization("user"), cartController.purchaseCart);
 
 
 

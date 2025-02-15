@@ -1,4 +1,5 @@
 import { cartService } from '../services/cart.service.js';
+import { ticketService } from '../services/ticket.service.js';
 
 class CartController {
 
@@ -6,8 +7,8 @@ class CartController {
         try {
             const { cid, pid } = req.params;
             const updatedCart = await cartService.addProdToCart(cid, pid);
-            res.json({
-                status: "succes",
+            res.status(200).json({
+                status: "success",
                 message: "Product added to cart",
                 payload: { cart: updatedCart }
             });
@@ -20,8 +21,8 @@ class CartController {
     async getAllCarts(req, res, next) {
         try {
             const carts = await cartService.getAllCarts();
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 payload: { carts: carts }
             });
         } catch (error) {
@@ -33,8 +34,8 @@ class CartController {
         try {
             const { cid } = req.params;
             const cart = await cartService.getCartById(cid);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 payload: { cart: cart }
             });
         } catch (error) {
@@ -47,10 +48,10 @@ class CartController {
             const { cid, pid } = req.params;
             const { quantity } = req.body;
             const updatedCart = await cartService.addProdToCart(cid, pid, quantity);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 message: 'Product quantity updated successfully',
-                paylod: { cart: updatedCart }
+                payload: { cart: updatedCart }
             })
         } catch (error) {
             next(error)
@@ -62,10 +63,10 @@ class CartController {
             const { cid } = req.params;
             const products = req.body;
             const updatedCart = await cartService.updateCartProds(cid, products);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 message: 'Cart updated successfully',
-                paylod: { cart: updatedCart }
+                payload: { cart: updatedCart }
             });
         } catch (error) {
             next(error);
@@ -76,8 +77,8 @@ class CartController {
         try {
             const { cid, pid } = req.params;
             const deletedItem = await cartService.removeProduct(cid, pid);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 message: `Product with ID: ${pid} successfully removed`,
                 payload: { cart: deletedItem }
             });
@@ -90,15 +91,40 @@ class CartController {
         try {
             const { cid } = req.params;
             const updatedCart = await cartService.removeAllProducts(cid);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 message: "The cart was successfully emptied",
-                paylod: { cart: updatedCart }
+                payload: { cart: updatedCart }
             });
         } catch (error) {
             next(error);
         }
     }
+
+    async purchaseCart(req, res, next) {
+        try {
+            const { cid } = req.params;
+            const result = await cartService.purchaseCart(cid);
+
+            if (Array.isArray(result) && result.length > 0) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'Some products do not have enough stock and cannot be purchased',
+                    productsWithoutStock: result
+                });
+            }
+        
+            const ticket = await ticketService.createTicket(result, req.user.email);
+            res.status(200).json({
+                status: "Success",
+                message: "Purchase completed successfully",
+                payload: { ticket: ticket }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
 }
 
 export const cartController = new CartController();

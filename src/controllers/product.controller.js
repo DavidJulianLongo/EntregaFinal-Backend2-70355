@@ -5,8 +5,8 @@ class ProductController {
     async createProduct(req, res, next) {
         try {
             const product = await prodService.createProduct(req.body);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 payload: product
             });
         } catch (error) {
@@ -18,7 +18,7 @@ class ProductController {
         try {
             const { page, limit, query, sort } = req.query;
             const response = await prodService.getAllProducts(page, limit, query, sort);
-            res.json({
+            res.status(200).json({
                 status: response.docs.length > 0? 'success' : 'error',
                 payload: { products: response.docs },
                 totalPages: response.totalPages,
@@ -39,8 +39,8 @@ class ProductController {
         try {
             const { id } = req.params;
             const product = await prodService.getProductById(id);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 payload: product
             });
         } catch (error) {
@@ -53,8 +53,8 @@ class ProductController {
         try {
             const { id } = req.params;
             const updatedProd = await prodService.updateProduct(id, req.body);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 payload: updatedProd
             });
         } catch (error) {
@@ -67,8 +67,8 @@ class ProductController {
         try {
             const { id } = req.params;
             const deletedProd = await prodService.removeProduct(id);
-            res.json({
-                status: "Succes",
+            res.status(200).json({
+                status: "Success",
                 message: "Removed product",
                 payload: deletedProd
             });
