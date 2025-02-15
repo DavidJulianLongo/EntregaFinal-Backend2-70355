@@ -72,8 +72,6 @@ router.delete("/current/delete", passportCall("current"), async (req, res) => {
         res.status(500).json({ status: "Error", msg: "Internal server error" });
     }
 
-
-
 });
 
 

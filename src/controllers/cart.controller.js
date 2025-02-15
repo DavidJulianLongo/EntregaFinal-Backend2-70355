@@ -104,13 +104,21 @@ class CartController {
     async purchaseCart(req, res, next) {
         try {
             const { cid } = req.params;
+            const cart = await cartService.getCartById(cid);
+            if (cart.products.length === 0) {
+                return res.status(400).json({
+                    status: 'error',
+                    message: 'The cart is empty and cannot be purchased'
+                });
+            }
+            
             const result = await cartService.purchaseCart(cid);
 
             if (Array.isArray(result) && result.length > 0) {
                 return res.status(400).json({
                     status: 'error',
                     message: 'Some products do not have enough stock and cannot be purchased',
-                    productsWithoutStock: result
+                    Products: result
                 });
             }
         
