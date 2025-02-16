@@ -27,6 +27,10 @@ router.get("/google", passport.authenticate("google", {
 // Obtener usuario actual
 router.get("/current", passportCall("current"), authorization("user"), sessionController.currentUser);
 
+// Cerrar sesión de usuario
+router.delete("/logout", passportCall("current"), sessionController.logout);
+
+
 
 
 // Actualización de perfil de usuario

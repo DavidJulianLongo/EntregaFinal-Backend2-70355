@@ -6,11 +6,12 @@ class SessionController {
 
     async register(req, res) {
         try {
-            res.status(200).json({ 
-                status: "Success", 
-                message: "User registered successfully" });
+            res.status(200).json({
+                status: "Success",
+                message: "User registered successfully"
+            });
         } catch (error) {
-            res.status(500).json({ status: "Error", msg: "Internal server error" })
+            next(error);
         }
     };
 
@@ -21,23 +22,25 @@ class SessionController {
             const token = generateToken(req.user);
             res.cookie("token", token, { httpOnly: true, signed: true, sameSite: "strict", maxAge: 1000 * 60 * 60 * 24 * 1 }); // 1 día
 
-            res.status(200).json({ 
-                status: "Success", 
-                message: "successful login", 
-                payload: user, token });
+            res.status(200).json({
+                status: "Success",
+                message: "successful login",
+                payload: user
+            });
         } catch (error) {
-            res.status(500).json({ status: "Error", msg: "Internal server error" })
+            next(error);
         }
     }
 
     async google(req, res) {
         try {
             const token = generateToken(req.user);
-            res.status(200).json({ 
-                status: "Success", 
-                session: req.user, token });
+            res.status(200).json({
+                status: "Success",
+                session: req.user, token
+            });
         } catch (error) {
-            res.status(500).json({ status: "Error", msg: "Internal server error" });
+            next(error);
         }
     }
 
@@ -45,13 +48,28 @@ class SessionController {
     async currentUser(req, res) {
         try {
             const user = new UserDTO(req.user);
-            res.status(200).json({ 
-                status: "Success", 
-                user: user });
+            res.status(200).json({
+                status: "Success",
+                user: user
+            });
         } catch (error) {
-            res.status(500).json({ status: "Error", msg: "Internal server error" });
+            next(error);
         }
     }
+
+    async logout(req, res) {
+        try {
+            res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "Strict" });
+            return res.status(200).json({
+                status: "Success",
+                message: "Logout successful"
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
 
 }
 

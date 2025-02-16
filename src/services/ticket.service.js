@@ -4,7 +4,6 @@ import { CustomError } from '../utils/customError.js';
 import { sendTicketEmail } from "../config/mailer/mailer.config.js";
 
 
-
 class TicketService {
 
     async createTicket(amount, purchaser){
