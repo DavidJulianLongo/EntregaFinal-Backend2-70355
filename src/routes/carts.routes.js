@@ -9,17 +9,17 @@ router.get('/', cartController.getAllCarts);
 
 router.get('/:cid', cartController.getCartById);
 
-router.post('/:cid/product/:pid', passportCall("current"), authorization("user"), cartController.addProdToCart);
+router.post('/:cid/product/:pid', passportCall("jwt"), authorization("user"), cartController.addProdToCart);
 
-router.put('/:cid/products/:pid', passportCall("current"), authorization("user"), cartController.updateProdQuantity);
+router.put('/:cid/products/:pid', passportCall("jwt"), authorization("user"), cartController.updateProdQuantity);
 
-router.put('/:cid/',passportCall("current"), authorization("user"), cartController.updateCartProds);
+router.put('/:cid/',passportCall("jwt"), authorization("user"), cartController.updateCartProds);
 
-router.delete('/:cid/products/:pid',passportCall("current"), authorization("user"), cartController.removeProd);
+router.delete('/:cid/products/:pid',passportCall("jwt"), authorization("user"), cartController.removeProd);
 
-router.delete('/:cid', passportCall("current"), authorization("user"), cartController.removeAllProds);
+router.delete('/:cid', passportCall("jwt"), authorization("user"), cartController.removeAllProds);
 
-router.post('/:cid/purchase', passportCall("current"), authorization("user"), cartController.purchaseCart);
+router.post('/:cid/purchase', passportCall("jwt"), authorization("user"), cartController.purchaseCart);
 
 
 

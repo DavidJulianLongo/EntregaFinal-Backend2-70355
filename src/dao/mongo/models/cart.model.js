@@ -18,7 +18,11 @@ const cartSchema = new mongoose.Schema({
                 min: [1, 'Quantity must be at least 1']
             }
         }
-    ]
+    ],
+    active: {
+        type: Boolean,
+        default: true
+    }
 });
 
 export const cartModel = mongoose.model(cartsCollection , cartSchema);

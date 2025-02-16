@@ -12,7 +12,7 @@ export const initializePassport = () => {
     passport.use("register", localRegister);
     passport.use("login", localLogin);
     passport.use(google);
-    passport.use("current", jwt);
+    passport.use("jwt", jwt);
 
     passport.serializeUser((user, done) => {
         done(null, user._id);

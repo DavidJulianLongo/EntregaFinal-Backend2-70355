@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     cart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "cart"
+    },
+    active: {
+        type: Boolean,
+        default: true  
     }
 });
 

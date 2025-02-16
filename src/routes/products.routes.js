@@ -10,10 +10,10 @@ router.get('/', prodController.getAllProducts);
 
 router.get('/:id', prodController.getProductById);
 
-router.post('/', passportCall("current"), authorization("admin"), prodController.createProduct);
+router.post('/', passportCall("jwt"), authorization("admin"), prodController.createProduct);
 
-router.put('/:id', passportCall("current"), authorization("admin"), prodController.updateProduct);
+router.put('/:id', passportCall("jwt"), authorization("admin"), prodController.updateProduct);
 
-router.delete('/:id', passportCall("current"), authorization("admin"), prodController.removeProduct);
+router.delete('/:id', passportCall("jwt"), authorization("admin"), prodController.removeProduct);
 
 export default router;

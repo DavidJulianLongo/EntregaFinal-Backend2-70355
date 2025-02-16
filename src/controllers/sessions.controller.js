@@ -37,7 +37,7 @@ class SessionController {
             const token = generateToken(req.user);
             res.status(200).json({
                 status: "Success",
-                session: req.user, token
+                session: req.user
             });
         } catch (error) {
             next(error);
@@ -59,7 +59,7 @@ class SessionController {
 
     async logout(req, res) {
         try {
-            res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "Strict" });
+            res.clearCookie("token", { httpOnly: true, signed: true, sameSite: "strict"});
             return res.status(200).json({
                 status: "Success",
                 message: "Logout successful"
