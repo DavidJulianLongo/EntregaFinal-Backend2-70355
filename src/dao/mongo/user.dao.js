@@ -7,8 +7,7 @@ class UserDao extends BaseDao{
     }
 
     async getByEmail(email) {
-        const user = await userModel.findOne({ email });
-        return user;
+        return await userModel.findOne({ email });
     }
 
 }

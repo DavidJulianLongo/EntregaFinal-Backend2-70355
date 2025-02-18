@@ -25,7 +25,7 @@ class SessionController {
             res.status(200).json({
                 status: "Success",
                 message: "successful login",
-                payload: user
+                payload: user.role
             });
         } catch (error) {
             next(error);

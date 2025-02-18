@@ -26,4 +26,5 @@ export const initializePassport = () => {
             done(error)
         }
     });
+
 } 

@@ -6,6 +6,7 @@ export const passportCall = (strategy) => {
             if (err) return next(err);
             if (!user) return res.status(401).json({ status: "Error", message: info.message ? info.message : info.message.toString() });
             req.user = user;
+            console.log("User from JWT:", user);
             next();
         })(req, res, next);
     }
