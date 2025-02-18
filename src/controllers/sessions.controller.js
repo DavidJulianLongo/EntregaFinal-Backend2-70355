@@ -1,4 +1,4 @@
-; import { UserDTO } from "../dto/user.dto.js";
+import { UserDTO } from "../dto/user.dto.js";
 import { generateToken } from "../utils/jwt.js";
 
 
@@ -17,6 +17,7 @@ class SessionController {
 
     async login(req, res) {
         try {
+
             const user = new UserDTO(req.user);
             //genera el token y lo almacena en una cookie por 24 horas
             const token = generateToken(req.user);
@@ -25,7 +26,7 @@ class SessionController {
             res.status(200).json({
                 status: "Success",
                 message: "successful login",
-                payload: user.role
+                payload: user
             });
         } catch (error) {
             next(error);
